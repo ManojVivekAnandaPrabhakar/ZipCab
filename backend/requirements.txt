@@ -1,0 +1,28 @@
+# Django framework
+Django==5.2.3
+
+# Database connectors
+psycopg2==2.9.10        
+mysqlclient==2.2.7      
+PyMySQL==1.1.1          
+dj-database-url==3.0.1  
+
+# REST framework
+djangorestframework==3.16.1
+djangorestframework_simplejwt==5.5.1
+
+# Environment variables
+python-dotenv==1.1.1
+python-decouple==3.8     
+
+# CORS handling
+django-cors-headers==4.4.0
+
+# Static file handling in production
+whitenoise==6.9.0
+
+# Deployment
+gunicorn==23.0.0          
+
+# Utilities for requests
+requests==2.32.4

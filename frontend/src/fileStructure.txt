@@ -1,0 +1,16 @@
+zipcab-frontend/
+│
+├── src/
+│   ├── api.jsx                 
+│   ├── main.jsx                 
+│   ├── AuthContext.jsx         
+│   ├── App.jss                 
+│   ├── index.css               
+│   ├── components/
+│   │   ├── Register.jsx
+│   │   ├── Login.jsx
+│   │   ├── Profile.jsx
+│   │   ├── CalculateFare.jsx
+│   │   └── BookingHistory.jsx
+│   └── pages/
+│       └── Home.jsx
