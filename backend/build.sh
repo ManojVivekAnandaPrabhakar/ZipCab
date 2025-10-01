@@ -18,9 +18,7 @@ cd ../frontend
 # Build the React app (creates the 'dist' directory inside 'frontend/')
 npm run build
 
-# --- 3. Copy React Build to Django Static Folder ---
-# Navigate back to the backend
-cd ../backend
+
 
 # Remove previous React build if necessary and copy new files
 # This copies the contents of frontend/dist/ into backend/static
