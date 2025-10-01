@@ -6,6 +6,7 @@ services:
     name: zipcab
     env: python
     plan: free
+    rootDir: backend 
     buildCommand: "./build.sh"
     startCommand: "gunicorn zipcab_project.wsgi:application"
     envVars:
