@@ -1,8 +1,9 @@
 /** @type {import('postcss-load-config').Config} */
 export default {
-  // This tells Vite/PostCSS to run these two packages (plugins)
   plugins: {
-    tailwindcss: {},
+    // CRITICAL FIX: The core 'tailwindcss' package no longer works directly here in v4.
+    // It must use the separate '@tailwindcss/postcss' package once installed.
+    '@tailwindcss/postcss': {},
     autoprefixer: {},
   },
 }
