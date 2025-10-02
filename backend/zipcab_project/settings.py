@@ -1,4 +1,4 @@
-# zipcab_project/settings.py
+#zipcab_project/settings.py
 import os
 from pathlib import Path
 import dj_database_url
@@ -132,16 +132,12 @@ USE_TZ = True
 
 # STATIC FILES
 
-# ----------------- NEW CONFIGURATION FOR REACT BUILD -----------------
-# Tells 'collectstatic' to look in this directory for the React files copied by build.sh
-# BASE_DIR is 'ZipCab/backend', so this resolves to 'ZipCab/backend/static/frontend_build'
-STATICFILES_DIRS = [
-    BASE_DIR / 'static' / 'frontend_build',
-]
-# -------------------------------------------------------------------
-
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'  
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [
+    # Path to the React build files copied by build.sh
+    BASE_DIR / 'backend' / 'static' / 'frontend_build',
+]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'  # regarding deployment for react 
 
 
