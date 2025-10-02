@@ -1,0 +1,19 @@
+
++---.vscode
++---backend
+|   +---api
+|   +---Include
+|   +---Lib
+|   +---Scripts
+|   +---manage.py
+|   +---build.sh
+|   +---render.yaml
+|   +---zipcab_project
++---frontend
+|   +---dist
+|   +---assets
+    +---node_modules
+    +---.bin
+    +---.vite
+    +---.vite-temp
+    +---@babel

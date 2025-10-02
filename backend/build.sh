@@ -2,43 +2,34 @@
 
 set -o errexit # Exit immediately if a command exits with a non-zero status.
 
-# --- 1. Navigate to Django backend directory for Python dependencies ---
-cd backend
+# NOTE: The working directory is now 'ZipCab/backend/'
 
-# Install Python dependencies
+# --- 1. Install Python dependencies (already in backend directory) ---
 pip install -r requirements.txt
 
 # --- 2. Build React Frontend ---
-# Navigate to the frontend directory
+
+# Navigate to the frontend directory (up one level, then into frontend)
 cd ../frontend
 
-# Install Node dependencies (if needed, otherwise skip this line)
-# npm install 
-
-# Build the React app (creates the 'dist' directory inside 'frontend/')
+npm install 
 npm run build
 
+# --- 3. Copy React Build to Django Static Folder ---
 
+# Navigate back to the backend directory
+cd ../backend
 
-# Remove previous React build if necessary and copy new files
-# This copies the contents of frontend/dist/ into backend/static
+# Target: static/frontend_build is inside the current directory (backend/)
 rm -rf static/frontend_build
 mkdir -p static/frontend_build
-cp -r ../frontend/dist/* static/frontend_build/
 
-# *** IMPORTANT: You must update your Django settings.py to include 'static/frontend_build' 
-#     in your STATICFILES_DIRS for collectstatic to pick them up.
+# Source: ../frontend/dist/ is correct relative to the backend/ directory
+cp -r ../frontend/dist/* static/frontend_build/
 
 # --- 4. Run Django Setup ---
 
-# Run migrations (assuming manage.py is now in the current directory: backend/)
+# manage.py is in the current directory: backend/
 python manage.py migrate
-
-# Collect static files (moves files from static/frontend_build/ into STATIC_ROOT)
 python manage.py collectstatic --noinput
-
-# Create admin user
 python manage.py create_admin
-
-# Navigate back to the project root for the start command
-cd ..

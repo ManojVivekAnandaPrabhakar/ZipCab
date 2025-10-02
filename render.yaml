@@ -1,5 +1,5 @@
 
-# render.yaml
+# ZipCab/render.yaml
 
 services:
   - type: web
@@ -7,8 +7,10 @@ services:
     env: python
     plan: free
     rootDir: backend 
-    buildCommand: "./build.sh"
+    # Corrected path: build.sh is now local to the 'backend' directory
+    buildCommand: "./build.sh" 
     startCommand: "gunicorn zipcab_project.wsgi:application"
+# ... rest of the file
     envVars:
       - key: DATABASE_URL
         fromDatabase:
