@@ -1,4 +1,4 @@
-# Ignore secret config
+# Environment files
 .env
 .env.example
 
@@ -12,16 +12,17 @@ db.sqlite3
 .vscode/
 .idea/
 
-# Static/media files
-/static/
-/media/
+# Static and media
+staticfiles/
+static/
+media/
 
 # Virtual environments
 env/
+venv/
 .venv/
-Lib
-Scripts
-staticfiles
+Lib/
+Scripts/
+
 # Logs
 *.log
-.env 
