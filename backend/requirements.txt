@@ -1,28 +1,24 @@
-# Django framework
+asgiref==3.9.2
+certifi==2025.8.3
+charset-normalizer==3.4.3
+dj-database-url==3.0.1
 Django==5.2.3
-
-# Database connectors
-psycopg2==2.9.10        
-mysqlclient==2.2.7      
-PyMySQL==1.1.1          
-dj-database-url==3.0.1  
-
-# REST framework
+django-cors-headers==4.4.0
+django-silk==5.4.3
 djangorestframework==3.16.1
 djangorestframework_simplejwt==5.5.1
-
-# Environment variables
+gprof2dot==2025.4.14
+gunicorn==23.0.0
+idna==3.10
+mysqlclient==2.2.7
+packaging==25.0
+psycopg2==2.9.10
+PyJWT==2.10.1
+PyMySQL==1.1.1
+python-decouple==3.8
 python-dotenv==1.1.1
-python-decouple==3.8     
-
-# CORS handling
-django-cors-headers==4.4.0
-
-# Static file handling in production
-whitenoise==6.9.0
-
-# Deployment
-gunicorn==23.0.0          
-
-# Utilities for requests
 requests==2.32.4
+sqlparse==0.5.3
+tzdata==2025.2
+urllib3==2.5.0
+whitenoise==6.9.0

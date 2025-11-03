@@ -19,7 +19,9 @@ db.sqlite3
 # Virtual environments
 env/
 .venv/
-
+Lib
+Scripts
+staticfiles
 # Logs
 *.log
 .env 

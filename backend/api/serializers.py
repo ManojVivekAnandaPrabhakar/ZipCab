@@ -32,4 +32,4 @@ class DistanceRequestSerializer(serializers.Serializer):
         drop = data.get("drop", "").strip().lower()
         if pickup == drop:
             raise serializers.ValidationError("Pickup and drop locations must be different.")
-        return data
+        return data 

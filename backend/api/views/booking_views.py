@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,AllowAny
 from ..serializers import DistanceRequestSerializer, BookingSerializer
 from ..utils import get_coordinates, get_distance_km, calculate_price
 from ..models import Booking
@@ -13,8 +13,8 @@ from ..models import Booking
 
 class CalculateFareView(APIView):
     
-    permission_classes = [IsAuthenticated]
-
+    
+    permission_classes=[IsAuthenticated]
     def post(self, request):
         serializer = DistanceRequestSerializer(data=request.data)
         if serializer.is_valid():
@@ -63,7 +63,7 @@ def test_utilities(request):
 #booking create 
 
 class CreateBookingView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes= [IsAuthenticated]
 
     def post(self, request):
         data = request.data
