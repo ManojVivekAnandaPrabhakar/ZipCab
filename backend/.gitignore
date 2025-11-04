@@ -1,6 +1,6 @@
 # Environment files
 .env
-.env.example
+
 
 # Python and Django caches
 __pycache__/

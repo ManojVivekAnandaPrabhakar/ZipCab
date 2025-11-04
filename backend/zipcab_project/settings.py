@@ -147,19 +147,25 @@ USE_TZ = True
 # --------------------------------------
 # STATIC & MEDIA
 # --------------------------------------
-STATIC_URL = "/static/"
-# STATICFILES_DIRS = [BASE_DIR / "frontend" / "dist" / "assets"]
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
-    BASE_DIR / "static",  # only if you have a /static/ folder
+    os.path.join(BASE_DIR, 'frontend', 'dist', 'assets'),
 ]
+
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 # ----
-CORS_ALLOW_ALL_ORIGINS = True # development only change it when deploying
 
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'your-render-service-name.onrender.com']
+
+CORS_ALLOW_ALL_ORIGINS = True # development only change it when deploying
+CORS_ALLOWED_ORIGINS = [
+    'https://your-frontend-name.onrender.com',
+    'http://localhost:5173',
+]
 CORS_ALLOW_CREDENTIALS = True 
 CORS_ALLOW_HEADERS = [
     "authorization",
