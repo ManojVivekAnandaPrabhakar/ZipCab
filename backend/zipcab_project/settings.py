@@ -159,14 +159,19 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 # ----
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'your-render-service-name.onrender.com']
+ALLOWED_HOSTS = ["zipcab-wgbm.onrender.com", "localhost", "127.0.0.1"]
 
-CORS_ALLOW_ALL_ORIGINS = True # development only change it when deploying
+
+# SECURITY WARNING: keep this off in production unless same-origin build
+CORS_ALLOW_ALL_ORIGINS = False
+
 CORS_ALLOWED_ORIGINS = [
-    'https://your-frontend-name.onrender.com',
-    'http://localhost:5173',
+    "https://zipcab-wgbm.onrender.com",  # your Render domain
+    "http://localhost:5173",             # local Vite dev server
+    "http://127.0.0.1:5173",             # sometimes used by Vite
 ]
-CORS_ALLOW_CREDENTIALS = True 
+
+CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = [
     "authorization",
     "content-type",
