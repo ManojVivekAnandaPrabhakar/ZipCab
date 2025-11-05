@@ -30,7 +30,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "rest_framework",  # ✅ Needed for JWT
     "rest_framework_simplejwt",  # ✅ JWT support
-    "silk",
+    
 
     # Your apps
     "api",
@@ -52,7 +52,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "silk.middleware.SilkyMiddleware",
+    
 ]
 
 ROOT_URLCONF = "zipcab_project.urls"

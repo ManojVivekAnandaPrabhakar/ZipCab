@@ -33,15 +33,19 @@ export default function Register() {
         setMessage("⚠️ Unexpected response. Please try again.");
       }
     } catch (err) {
-      const data = err.response?.data || {};
-      const errorMsg =
-        data.username?.[0] ||
-        data.email?.[0] ||
-        data.password?.[0] ||
-        data.detail ||
-        "❌ Failed to register!";
+      // Log full error for debugging
+      console.error("Registration Error:", err.response?.data || err);
 
-      setMessage(errorMsg);
+      // Build a combined message for all field errors
+      const data = err.response?.data || {};
+      let combinedMsg = "";
+
+      if (data.username) combinedMsg += `Username: ${data.username.join(" ")}\n`;
+      if (data.email) combinedMsg += `Email: ${data.email.join(" ")}\n`;
+      if (data.password) combinedMsg += `Password: ${data.password.join(" ")}\n`;
+      if (data.detail) combinedMsg += `${data.detail}\n`;
+
+      setMessage(combinedMsg.trim() || "❌ Failed to register!");
     } finally {
       setLoading(false);
     }
@@ -54,13 +58,13 @@ export default function Register() {
       </h2>
 
       {message && (
-        <p
-          className={`mb-4 text-center font-medium ${
+        <pre
+          className={`mb-4 text-center font-medium whitespace-pre-wrap ${
             message.startsWith("✅") ? "text-green-600" : "text-red-600"
           }`}
         >
           {message}
-        </p>
+        </pre>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
