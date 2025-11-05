@@ -14,29 +14,33 @@ export default function Register() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Handle input changes
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
     setLoading(true);
 
     try {
-      await axiosInstance.post("/auth/register/", formData);
+      const res = await axiosInstance.post("/api/auth/register/", formData);
 
-      setMessage("✅ Registration successful! Redirecting to login...");
-      setTimeout(() => navigate("/login"), 1500);
+      if (res.status === 201 || res.status === 200) {
+        setMessage("✅ Registration successful! Redirecting to login...");
+        setTimeout(() => navigate("/login"), 1500);
+      } else {
+        setMessage("⚠️ Unexpected response. Please try again.");
+      }
     } catch (err) {
-      // Show first available error message
+      const data = err.response?.data || {};
       const errorMsg =
-        err.response?.data?.username?.[0] ||
-        err.response?.data?.email?.[0] ||
-        err.response?.data?.password?.[0] ||
+        data.username?.[0] ||
+        data.email?.[0] ||
+        data.password?.[0] ||
+        data.detail ||
         "❌ Failed to register!";
+
       setMessage(errorMsg);
     } finally {
       setLoading(false);
@@ -46,7 +50,7 @@ export default function Register() {
   return (
     <div className="max-w-md mx-auto bg-white shadow-lg rounded-2xl p-6 mt-10">
       <h2 className="text-2xl font-bold text-blue-600 mb-4 text-center">
-        Register
+        Create Account
       </h2>
 
       {message && (
@@ -66,7 +70,7 @@ export default function Register() {
           onChange={handleChange}
           placeholder="Username"
           required
-          className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="input"
         />
 
         <input
@@ -76,7 +80,7 @@ export default function Register() {
           onChange={handleChange}
           placeholder="Email"
           required
-          className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="input"
         />
 
         <input
@@ -86,13 +90,13 @@ export default function Register() {
           onChange={handleChange}
           placeholder="Password"
           required
-          className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="input"
         />
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 text-white py-3 rounded-md font-semibold hover:bg-blue-700 transition duration-300 disabled:opacity-50"
+          className="btn-blue w-full disabled:opacity-50"
         >
           {loading ? "Registering..." : "Register"}
         </button>

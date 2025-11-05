@@ -1,34 +1,23 @@
-# zipcab_project/settings.py
-
 import os
 from pathlib import Path
-from dotenv import load_dotenv
 import dj_database_url
+from dotenv import load_dotenv
 
-# --------------------------------------
-# BASE DIR
-# --------------------------------------
+# Load environment variables
+load_dotenv()
+
+# -----------------------------------------------------
+# BASE SETTINGS
+# -----------------------------------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-# --------------------------------------
-# LOAD ENV
-# --------------------------------------
-load_dotenv(BASE_DIR / ".env")
-
-DJANGO_ENV = os.getenv("DJANGO_ENV", "local")
-
-# --------------------------------------
-# SECRET & DEBUG
-# --------------------------------------
-API_KEY = os.getenv("API_KEY","error")
-SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-default-key")
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-temp-key")
 DEBUG = os.getenv("DEBUG", "True") == "True"
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", ".onrender.com"]
+API_KEY=os.getenv("API_KEY","none")
 
-ALLOWED_HOSTS = ["*"]  # Allow all hosts for development
-
-# --------------------------------------
-# INSTALLED APPS
-# --------------------------------------
+# -----------------------------------------------------
+# APPLICATIONS
+# -----------------------------------------------------
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -36,45 +25,45 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "rest_framework",
+
+    # Third-party
     "corsheaders",
-    "silk" ,
-    "api.apps.ApiConfig",
+    "rest_framework",  # ✅ Needed for JWT
+    "rest_framework_simplejwt",  # ✅ JWT support
+    "silk",
+
+    # Your apps
+    "api",
 ]
 
-
-
-# --------------------------------------
+# -----------------------------------------------------
 # MIDDLEWARE
-# --------------------------------------
+# -----------------------------------------------------
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",  # place CORS middleware always at the first place 
+    "corsheaders.middleware.CorsMiddleware",  # Always first
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
+
+    # ❌ Removed CsrfViewMiddleware (since JWT doesn’t use it)
+    # "django.middleware.csrf.CsrfViewMiddleware",
+
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "silk.middleware.SilkyMiddleware"
+    "silk.middleware.SilkyMiddleware",
 ]
 
-# Silk middleware only for local / admin
-if DJANGO_ENV == "local":
-    MIDDLEWARE.insert(0, "silk.middleware.SilkyMiddleware")
-
-# --------------------------------------
-# URL CONFIG
-# --------------------------------------
 ROOT_URLCONF = "zipcab_project.urls"
 
-# --------------------------------------
+# -----------------------------------------------------
 # TEMPLATES
-# --------------------------------------
+# -----------------------------------------------------
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "frontend" / "dist"],  # React build
+        "DIRS": [BASE_DIR.parent / "frontend" / "dist"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -89,96 +78,105 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "zipcab_project.wsgi.application"
 
-# --------------------------------------
-# DATABASE
-# --------------------------------------
-if DJANGO_ENV == "production":
-    DATABASE_URL = os.getenv("DATABASE_URL")
-else:
-    DATABASE_URL = os.getenv("LOCAL_DATABASE_URL")
-
-DATABASES = {
-    "default": dj_database_url.parse(DATABASE_URL)
-}
-#permission classes
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    )
-}
-# settings.py
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "unique-snowflake",
+# -----------------------------------------------------
+# DATABASE CONFIG
+# -----------------------------------------------------
+if DEBUG:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": dj_database_url.parse(
+            os.getenv("DATABASE_URL"),
+            conn_max_age=600,
+            ssl_require=True,
+        )
+    }
 
-# --------------------------------------
-# PASSWORD VALIDATORS
-# --------------------------------------
+# -----------------------------------------------------
+# PASSWORD VALIDATION
+# -----------------------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-# --------------------------------------
+# -----------------------------------------------------
 # INTERNATIONALIZATION
-# --------------------------------------
+# -----------------------------------------------------
 LANGUAGE_CODE = "en-us"
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Kolkata"
 USE_I18N = True
 USE_TZ = True
 
-# --------------------------------------
-# STATIC & MEDIA
-# --------------------------------------
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = [
-    BASE_DIR / '../frontend/dist',
-]
-
+# -----------------------------------------------------
+# STATIC & MEDIA FILES
+# -----------------------------------------------------
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [BASE_DIR.parent / "frontend" / "dist"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-# ----
+# -----------------------------------------------------
+# CORS CONFIG
+# -----------------------------------------------------
+CORS_ALLOW_CREDENTIALS = False  # ✅ JWT doesn’t need cookies
 
-ALLOWED_HOSTS = ["zipcab-wgbm.onrender.com", "localhost", "127.0.0.1"]
+if os.getenv("DJANGO_ENV") == "production":
+    CORS_ALLOWED_ORIGINS = [
+        "https://zipcab-wgbm.onrender.com",
+    ]
+else:
+    CORS_ALLOWED_ORIGINS = [
+        "http://127.0.0.1:8000",
+        "http://localhost:5173",
+    ]
 
 
-# SECURITY WARNING: keep this off in production unless same-origin build
-CORS_ALLOW_ALL_ORIGINS = False
+# ❌ CSRF not needed
+CSRF_TRUSTED_ORIGINS = []
 
-CORS_ALLOWED_ORIGINS = [
-    "https://zipcab-wgbm.onrender.com",  # your Render domain
-    "http://localhost:5173",             # local Vite dev server
-    "http://127.0.0.1:5173",             # sometimes used by Vite
-]
+# -----------------------------------------------------
+# REST FRAMEWORK CONFIG
+# -----------------------------------------------------
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",  # ✅ Only JWT
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",  # ✅ Require auth by default
+    ],
+}
 
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_HEADERS = [
-    "authorization",
-    "content-type",
-    "accept",
-    "origin",
-    "user-agent",
-    "dnt",
-    "x-csrftoken",
-    "x-requested-with",
-]
+# -----------------------------------------------------
+# LOGGING
+# -----------------------------------------------------
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {"class": "logging.StreamHandler"},
+    },
+    "root": {"handlers": ["console"], "level": "INFO"},
+}
+
+# -----------------------------------------------------
+# DEFAULT PRIMARY KEY FIELD TYPE
+# -----------------------------------------------------
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# -----------------------------------------------------
+# FRONTEND BUILD (Optional)
+# -----------------------------------------------------
+FRONTEND_BUILD_DIR = BASE_DIR / "frontend" / "dist"
+if FRONTEND_BUILD_DIR.exists():
+    TEMPLATES[0]["DIRS"].append(FRONTEND_BUILD_DIR)
+    STATICFILES_DIRS.append(FRONTEND_BUILD_DIR / "assets")

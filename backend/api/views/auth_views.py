@@ -1,4 +1,4 @@
-#cab_booking/views/auth_views.py
+#api/views/auth_views.py
 
 from rest_framework import status
 from rest_framework.response import Response

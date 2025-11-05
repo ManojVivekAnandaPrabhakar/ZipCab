@@ -1,13 +1,16 @@
-# cab_booking/utils.py
+# api/utils.py
 import requests
 from django.conf import settings
 from django.core.cache import cache
 import logging
 import math
 
+
 logger = logging.getLogger(__name__)
 
 CACHE_TIMEOUT = 86400  # 1 day
+
+
 
 def get_coordinates(address):
     

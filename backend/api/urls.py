@@ -1,4 +1,4 @@
-#cab_booking/urls.py
+#api/urls.py
 from django.urls import path
 from .views import booking_views
 from .views.auth_views import RegisterView, ProfileView

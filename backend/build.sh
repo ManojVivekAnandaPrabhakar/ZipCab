@@ -1,35 +1,38 @@
 #!/usr/bin/env bash
-set -o errexit  # Exit immediately if a command exits with a non-zero status
+set -o errexit  # Exit immediately if any command fails
 
 echo "🚀 Starting build process..."
 
-# 1. Install backend dependencies
-echo "📦 Installing Python dependencies..."
+# 1️⃣ Install Python dependencies
+echo "📦 Installing backend dependencies..."
 pip install --upgrade pip
 pip install -r requirements.txt
 
-# 2. Build React frontend
+# 2️⃣ Build the React frontend
 echo "🧱 Building React frontend..."
 cd ../frontend
-npm install
+
+# Ensure we’re in the correct directory (important if Render runs script from root)
+if [ ! -f "package.json" ]; then
+  echo "❌ Could not find package.json. Are you in the right directory?"
+  exit 1
+fi
+
+npm ci --silent
 npm run build
 
-# 3. Move built files to Django static directory
-echo "📂 Moving built frontend to Django static directory..."
+# 3️⃣ Move back to backend directory
 cd ../backend
-rm -rf static/frontend_build
-mkdir -p static/frontend_build
-cp -r ../frontend/dist/* static/frontend_build/
 
-# 4. Run Django migrations and collectstatic
-echo "⚙️ Running Django setup..."
+# 4️⃣ Django setup: migrate & collect static files
+echo "⚙️ Applying migrations and collecting static files..."
 python manage.py migrate --noinput
 python manage.py collectstatic --noinput
 
-# 5. Optional: Create default admin user (only if your management command exists)
-if python manage.py | grep -q create_admin; then
+# 5️⃣ Optional: Create admin (if management command exists)
+if python manage.py | grep -q "create_admin"; then
   echo "👤 Creating admin user..."
   python manage.py create_admin
 fi
 
-echo "✅ Build complete!"
+echo "✅ Build complete! Ready for deployment."
