@@ -28,9 +28,8 @@ export default function Login() {
     setMessage("");
 
     try {
-      const { data } = await axiosInstance.post("/api/auth/login/", formData, {
-        withCredentials: true,
-      });
+      const { data } = await axiosInstance.post("/api/auth/login/", formData);
+
 
       loginUser({ username: formData.username, ...data });
       navigate("/profile");
