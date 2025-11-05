@@ -1,3 +1,4 @@
+// src/components/BookingHistory.jsx
 import { useEffect, useState } from "react";
 import axiosInstance from "../api";
 
@@ -8,17 +9,9 @@ export default function BookingHistory() {
 
   useEffect(() => {
     const fetchBookings = async () => {
-      const token = localStorage.getItem("access");
-      if (!token) {
-        setError("⚠️ Please log in to view your bookings.");
-        setLoading(false);
-        return;
-      }
-
       try {
-        const { data } = await axiosInstance.get("/api/bookings/", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        // Axios instance already attaches the JWT from localStorage
+        const { data } = await axiosInstance.get("/api/bookings/");
         setBookings(data);
       } catch (err) {
         const status = err.response?.status;
